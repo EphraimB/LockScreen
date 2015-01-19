@@ -10,6 +10,7 @@
 name:
     .db "LockScreen", 0
     
+start:     
       kld(de, inittab)
   pcall(openFileWrite)
   kld(hl, lockPath)
@@ -23,7 +24,7 @@ inittab:
 lockPath:
   .db "/bin/lockscreen", 0
 lockPathEnd:
-start:    
+  
     ; Get a lock on the devices we intend to use
     pcall(getLcdLock)
     pcall(getKeypadLock)
