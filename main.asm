@@ -18,13 +18,6 @@ start:
   pcall(streamWriteBuffer)
   pcall(closeStream)
   
-; ...
-inittab:
-  .db "/etc/inittab", 0
-lockPath:
-  .db "/bin/lockscreen", 0
-lockPathEnd:
-  
     ; Get a lock on the devices we intend to use
     pcall(getLcdLock)
     pcall(getKeypadLock)
@@ -61,7 +54,12 @@ _:  ld l, 60
     inc a
     djnz -_
 
-.loop:
+.loop:; ...
+inittab:
+  .db "/etc/inittab", 0
+lockPath:
+  .db "/bin/lockscreen", 0
+lockPathEnd:
     ; Copy the display buffer to the actual LCD
     pcall(fastCopy)
 
@@ -84,3 +82,10 @@ batteryIndicatorSprite: ; 8x4
     .db 0b10000110
     .db 0b10000110
     .db 0b11111100
+    
+; ...
+inittab:
+  .db "/etc/inittab", 0
+lockPath:
+  .db "/bin/lockscreen", 0
+lockPathEnd:
