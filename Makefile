@@ -4,7 +4,7 @@ include .knightos/variables.make
 ALL_TARGETS:=$(BIN)lockscreen
 
 # This is all the make targets to produce said files
-$(BIN)LockScreen: main.asm
+$(BIN)lockscreen: main.asm
 	mkdir -p $(BIN)
 	$(AS) $(ASFLAGS) --listing $(OUT)main.list main.asm $(BIN)lockscreen
 
