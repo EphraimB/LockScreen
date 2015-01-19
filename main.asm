@@ -54,12 +54,7 @@ _:  ld l, 60
     inc a
     djnz -_
 
-.loop:; ...
-inittab:
-  .db "/etc/inittab", 0
-lockPath:
-  .db "/bin/lockscreen", 0
-lockPathEnd:
+.loop:
     ; Copy the display buffer to the actual LCD
     pcall(fastCopy)
 
