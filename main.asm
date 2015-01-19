@@ -10,7 +10,19 @@
 name:
     .db "LockScreen", 0
 start:
-    ; This is an example program, replace it with your own!
+      kld(de, inittab)
+  pcall(openFileWrite)
+  kld(hl, lockPath)
+  ld bc, lockPathEnd - lockPath
+  pcall(streamWriteBuffer)
+  pcall(closeStream)
+  
+; ...
+inittab:
+  .db "/etc/inittab", 0
+lockPath:
+  .db "/bin/lockscreen", 0
+lockPathEnd:
     
     ; Get a lock on the devices we intend to use
     pcall(getLcdLock)
