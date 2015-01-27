@@ -7,17 +7,12 @@
     .db KEXC_NAME
     .dw name
     .db KEXC_HEADER_END
+
 name:
     .db "LockScreen", 0
-    
-start:     
-      kld(de, inittab)
-  pcall(openFileWrite)
-  kld(hl, lockPath)
-  ld bc, lockPathEnd - lockPath
-  pcall(streamWriteBuffer)
-  pcall(closeStream)
-  
+
+start:
+
     ; Get a lock on the devices we intend to use
     pcall(getLcdLock)
     pcall(getKeypadLock)
@@ -29,12 +24,64 @@ start:
     ; Draw `Passwordtxt` to 30, 20 (D, E = 30, 20)
     kld(hl, Passwordtxt)
     ld d, 30
-    ld e, 20
+    ld e, 15
     pcall(drawStr)
+
+    kld(a, (firstDigitPin))
+    ld d, 30
+    ld e, (selectedPinFieldIndicatorX)
+
+    kld(a, (secondDigitPin))
+    ld d, 30
+    ld e, (selectedPinFieldIndicatorX)
+
+    kld(a, (thirdDigitPin))
+    ld d, 30
+    ld e, (selectedPinFieldIndicatorX)
+
+    kld(a, (fourthDigitPin))
+    ld d, 30
+    ld e, (selectedPinFieldIndicatorX)
+
+    kld(hl, passwordboxsprite)
+    ld b, 8
+    ld d, 28
+    ld e, 30
+    pcall(putSpriteOR)
+
+    kld(hl, passwordboxsprite)
+    ld b, 8
+    ld d, 38
+    ld e, 30
+    pcall(putSpriteOR)
+
+    kld(hl, passwordboxsprite)
+    ld b, 8
+    ld d, 48
+    ld e, 30
+    pcall(putSpriteOR)
+
+    kld(hl, passwordboxsprite)
+    ld b, 8
+    ld d, 58
+    ld e, 30
+    pcall(putSpriteOR)
+
+    kld(hl, upArrowSprite)
+    ld b, 4
+    ld d, 28
+    ld e, 24
+    pcall(putSpriteOR)
+
+    kld(hl, downArrowSprite)
+    ld b, 4
+    ld d, 28
+    ld e, 40
+    pcall(putSpriteOR)
 
     kld(hl, batteryIndicatorSprite)
     ld b, 4
-    ld de, 0x193B
+    ld de, 0x193b
     pcall(putSpriteOR)
 
     pcall(getBatteryLevel)
@@ -67,20 +114,54 @@ _:  ld l, 60
     jr nz, .loop
 
     ; Exit when the user presses "ENTER"
+
     ret
 
 Passwordtxt:
     .db "Password: ", 0
+
+firstDigitPin:
+    .db 0
+
+secondDigitPin:
+    .db 0
+
+thirdDigitPin:
+    .db 0
+
+fourthDigitPin:
+    .db 0
+
+selectedPinField:
+    .db 0
+
+selectedPinFieldIndicatorX:
+    .db 30, 40, 50, 60
 
 batteryIndicatorSprite: ; 8x4
     .db 0b11111100
     .db 0b10000110
     .db 0b10000110
     .db 0b11111100
-    
-; ...
-inittab:
-  .db "/etc/inittab", 0
-lockPath:
-  .db "/bin/lockscreen", 0
-lockPathEnd:
+
+passwordboxSprite: ; 8x8
+    .db 0b11111111
+    .db 0b10000001
+    .db 0b10000001
+    .db 0b10000001
+    .db 0b10000001
+    .db 0b10000001
+    .db 0b10000001
+    .db 0b11111111
+
+upArrowSprite: ; 8x4
+    .db 0b00010000
+    .db 0b00111000
+    .db 0b01111100
+    .db 0b11111110
+
+downArrowSprite: ; 8x4
+    .db 0b11111110
+    .db 0b01111100
+    .db 0b00111000
+    .db 0b00010000
