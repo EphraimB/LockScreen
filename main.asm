@@ -27,7 +27,7 @@ start:
     ld e, 15
     pcall(drawStr)
 
-.loop:
+loop:
     kld(a, (firstDigitPin))
     ld d, 30
     ld e, 30
@@ -125,6 +125,7 @@ increase:
     ld a, (firstDigitPin)
     inc a
     ld (firstDigitPin), a
+    kjp(loop)
 
 Passwordtxt:
     .db "Password: ", 0
