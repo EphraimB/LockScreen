@@ -27,21 +27,23 @@ start:
     ld e, 15
     pcall(drawStr)
 
+.loop:
     kld(a, (firstDigitPin))
     ld d, 30
-    ld e, (selectedPinFieldIndicatorX)
+    ld e, 30
+    pcall(drawDecA)
 
     kld(a, (secondDigitPin))
     ld d, 30
-    ld e, (selectedPinFieldIndicatorX)
+    ld e, 40
 
     kld(a, (thirdDigitPin))
     ld d, 30
-    ld e, (selectedPinFieldIndicatorX)
+    ld e, 50
 
     kld(a, (fourthDigitPin))
     ld d, 30
-    ld e, (selectedPinFieldIndicatorX)
+    ld e, 60
 
     kld(hl, passwordboxsprite)
     ld b, 8
@@ -101,7 +103,6 @@ _:  ld l, 60
     inc a
     djnz -_
 
-.loop:
     ; Copy the display buffer to the actual LCD
     pcall(fastCopy)
 
@@ -110,12 +111,20 @@ _:  ld l, 60
     ; waitKey waits for a key to be pressed, then returns the key code in A
     pcall(waitKey)
 
+    cp kUP
+    jr z, increase
+
     cp kENTER
     jr nz, .loop
 
     ; Exit when the user presses "ENTER"
 
     ret
+
+increase:
+    ld a, (firstDigitPin)
+    inc a
+    ld (firstDigitPin), a
 
 Passwordtxt:
     .db "Password: ", 0
@@ -134,9 +143,6 @@ fourthDigitPin:
 
 selectedPinField:
     .db 0
-
-selectedPinFieldIndicatorX:
-    .db 30, 40, 50, 60
 
 batteryIndicatorSprite: ; 8x4
     .db 0b11111100
