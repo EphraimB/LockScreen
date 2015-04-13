@@ -10,14 +10,13 @@
 name:
     .db "lockscreen", 0
 start:
-    kld(de, startupFile)
+    kld(de, inittab)
     pcall(openFileWrite)
 
-    kld(hl, locatelockscreenForStartup)
-    ld d, 15
-    pcall(streamWriteWord)
+    kld(hl, lockPath)
+    kld(bc, lockPathEnd - lockPath)
+    pcall(streamWriteBuffer)
 
-    ld d, 15
     pcall(closeStream)
 
     ; Get a lock on the devices we intend to use
@@ -34,40 +33,28 @@ start:
     ld e, 15
     pcall(drawStr)
 
+    kld(hl, PINInputBox)
+    ld b, 8
     ld d, 23
     ld e, 25
-
-    ld b, 8
-
-    kld(hl, PINInputBox)
-
     pcall(putSpriteOR)
 
+    kld(hl, PINInputBox)
+    ld b, 8
     ld d, 33
     ld e, 25
-
-    ld b, 8
-
-    kld(hl, PINInputBox)
-
     pcall(putSpriteOR)
 
+    kld(hl, PINInputBox)
+    ld b, 8
     ld d, 43
     ld e, 25
-
-    ld b, 8
-
-    kld(hl, PINInputBox)
-
     pcall(putSpriteOR)
 
+    kld(hl, PINInputBox)
+    ld b, 8
     ld d, 53
     ld e, 25
-
-    ld b, 8
-
-    kld(hl, PINInputBox)
-
     pcall(putSpriteOR)
 
 loop:
@@ -80,199 +67,196 @@ loop:
     pcall(waitKey)
 
     cp k0
-    jp z, key0Pressed
+    kjp(z, key0Pressed)
 
     cp k1
-    jp z, key1Pressed
+    kjp(z, key1Pressed)
 
     cp k2
-    jp z, key2Pressed
+    kjp(z, key2Pressed)
 
     cp k3
-    jp z, key3Pressed
+    kjp(z, key3Pressed)
 
     cp k4
-    jp z, key4Pressed
+    kjp(z, key4Pressed)
 
     cp k5
-    jp z, key5Pressed
+    kjp(z, key5Pressed)
 
     cp k6
-    jp z, key6Pressed
+    kjp(z, key6Pressed)
 
     cp k7
-    jp z, key7Pressed
+    kjp(z, key7Pressed)
 
     cp k8
-    jp z, key8Pressed
+    kjp(z, key8Pressed)
 
     cp k9
-    jp z, key9Pressed
+    kjp(z, key9Pressed)
 
-    jp loop
+    kjp(loop)
 
 key0Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 0
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key1Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 1
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key2Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 2
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key3Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 3
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key4Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 4
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key5Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 5
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key6Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 6
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key7Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 7
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key8Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 8
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
-    jp passwordInput
+    kjp(passwordInput)
 
 key9Pressed:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
     inc a
-    ld (passwordInputBoxValue), a
+    kld((passwordInputBoxValue), a)
 
     ld a, 9
-    ld (passwordValue), a
+    kld((passwordValue), a)
 
 passwordInput:
-    ld a, (passwordInputBoxValue)
+    kld(a, (passwordInputBoxValue))
 
 passwordInputLoop:
     cp 0
-    jp z, passwordInput1
+    kjp(z, passwordInput1)
 
     cp 1
-    jp z, passwordInput2
+    kjp(z, passwordInput2)
 
     cp 2
-    jp z, passwordInput3
+    kjp(z, passwordInput3)
 
     cp 3
-    jp z, passwordInput4
+    kjp(z, passwordInput4)
 
     cp 4
-    jp z, unlock
+    kjp(z, unlock)
 
-    jp passwordInputLoop
+    kjp(passwordInputLoop)
 
 passwordInput1:
     ld d, 23
-    ld a, (passwordValue)
-    ld (passwordInputBox1Value), a
+    kld(a, (passwordValue))
+    kld((passwordInputBox1Value), a)
 
-    jp passwordInputSprite
+    kjp(passwordInputSprite)
 
 passwordInput2:
     ld d, 33
-    ld a, (passwordValue)
-    ld (passwordInputBox2Value), a
+    kld(a, (passwordValue))
+    kld((passwordInputBox2Value), a)
 
-    jp passwordInputSprite
+    kjp(passwordInputSprite)
 
 passwordInput3:
     ld d, 43
-    ld a, (passwordValue)
-    ld (passwordInputBox3Value), a
+    kld(a, (passwordValue))
+    kld((passwordInputBox3Value), a)
 
-    jp passwordInputSprite
+    kjp(passwordInputSprite)
 
 passwordInput4:
     ld d, 53
-    ld a, (passwordValue)
-    ld (passwordInputBox4Value), a
+    kld(a, (passwordValue))
+    kld((passwordInputBox4Value), a)
 
-    jp passwordInputSprite
+    kjp(passwordInputSprite)
 
 passwordInputSprite:
+    kld(hl, passwordHiddenSprite)
     ld e, 27
     ld b, 4
-
-    kld(hl, passwordHiddenSprite)
-
     pcall(putSpriteOR)
 
-    jp loop
+    kjp(loop)
 
 unlock:
 
     kld(de, unlockToCastle)
     pcall(openFileRead)
-    ret
 
 passwordtext:
     .db "Password:", 0
@@ -295,14 +279,16 @@ passwordInputBox4Value:
 passwordValue:
     .db 0
 
-startupFile:
-  .db "/ect/inittab", 0
-
 unlockToCastle:
     .db "/bin/castle", 0
 
-locatelockscreenForStartup:
+inittab:
+    .db "/etc/inittab", 0
+
+lockPath:
     .db "/bin/lockscreen", 0
+
+lockPathEnd:
 
 PINInputBox:    ; 8x8
     .db 0b11111111
