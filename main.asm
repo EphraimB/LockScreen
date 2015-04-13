@@ -11,7 +11,7 @@ name:
     .db "lockscreen", 0
 start:
     kld(de, inittab)
-    pcall(openFileRead)
+    pcall(openFileWrite)
 
     kld(hl, lockPath)
     kld(bc, lockPathEnd - lockPath)
