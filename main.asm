@@ -11,7 +11,7 @@ name:
     .db "lockscreen", 0
 start:
     kld(de, inittab)
-    pcall(openFileWrite)
+    pcall(openFileRead)
 
     kld(hl, lockPath)
     kld(bc, lockPathEnd - lockPath)
@@ -200,19 +200,19 @@ passwordInput:
     kld(a, (passwordInputBoxValue))
 
 passwordInputLoop:
-    cp 0
+    cp 1
     kjp(z, passwordInput1)
 
-    cp 1
+    cp 2
     kjp(z, passwordInput2)
 
-    cp 2
+    cp 3
     kjp(z, passwordInput3)
 
-    cp 3
+    cp 4
     kjp(z, passwordInput4)
 
-    cp 4
+    cp 5
     kjp(z, unlock)
 
     kjp(passwordInputLoop)
